@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Productos
+{% endblock %}
+
+{% block container %}
+
+    <!-- emmet: meta lenguaje -->
+    <div class="row">
+        <!-- formulario -->
+        <div class="col-3">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" id="nombre" class="form-control" required autofocus>
+                </div>
+
+                <div class="mb-3">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" name="apellido" id="apellido" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="correo">Correo</label>
+                    <input type="email" name="correo" id="correo" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="twitter">Twitter</label>
+                    <input type="text" name="twitter" id="twitter" class="form-control" placeholder="Tu usuario" required>
+                </div>
+
+                <div class="mb-3">
+                    <input type="submit" class="btn btn-success" value="Registrar participante">
+                </div>
+            </form>
+        </div>
+
+        <!-- datos -->
+        <div class="col-9">
+            <h2>Participantes</h2>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Correo</th>
+                        <th>twitter</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in participantes %}
+                    <tr>
+                        <td>{{ p.nombre }}</td>
+                        <td>{{ p.apellido }}</td>
+                        <td>{{ p.correo }}</td>
+                        <td>{{ p.twitter }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+{% endblock %}
