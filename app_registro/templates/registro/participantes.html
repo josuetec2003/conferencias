@@ -37,9 +37,23 @@
             </form>
         </div>
 
+        <!-- jQuery -->
+
         <!-- datos -->
         <div class="col-9">
-            <h2>Lista de Participantes</h2>
+            {% if messages %}
+                <div class="alert alert-success mb-2">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+                </div>
+            {% endif %}
+
+            <form action="" method="get">
+                <input type="search" name="q" value="{{ q }}" class="form-control" placeholder="Buscar participantes">
+            </form>
+
+            <h2 class="mt-3">Lista de Participantes: {{ participantes.count }}</h2>
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -59,9 +73,27 @@
                             {{ p.twitter|default_if_none:'-' }}
                         </td>
                     </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-danger text-center">No se encontraron resultados</td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 {% endblock %}
+
+{% block js %}
+<script>
+    $(function () {
+        
+        setTimeout(() => {
+            $('.alert').slideUp(function () {
+                $(this).remove();
+            });
+        }, 3000)
+
+    });
+</script>
+{% endblock  %}
