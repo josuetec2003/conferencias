@@ -1,7 +1,15 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
+from django.urls import reverse
 from .models import Participante
+
+from telegram import Bot # pip install python-telegram-bot
+
+TOKEN = '1689491589:AAFQs3K6z_CGP7Lw0i2SRZfU-CQXlRHTzWs'
+GROUP_ID = -549716729
+
+bot = Bot(token=TOKEN)
 
 def index(request):
     return render(request, 'registro/index.html')
@@ -17,7 +25,16 @@ def participantes(request):
         p = Participante(nombre=nombre, apellido=apellido, correo=correo, twitter=twitter)
         p.save()
 
-        messages.add_message(request, messages.INFO, f'El participante {nombre} {apellido} ha sido registrado con éxito')
+        msj = f'El participante {nombre} {apellido} ha sido registrado con éxito.'
+
+        # Codigo para enviar un mensaje a un grupo de telegram
+
+        try:
+            bot.send_message(chat_id=GROUP_ID, text=msj)
+        except Exception as e:
+            msj += f'<br/><strong>{e}</strong>'
+        
+        messages.add_message(request, messages.INFO, msj)
 
         # return JsonResponse({
         #     'nombre': nombre,
@@ -60,5 +77,7 @@ def participantes(request):
     return render(request, 'registro/participantes.html', ctx)
 
 
-
+def eliminar_participante(request, id):
+    Participante.objects.get(pk=id).delete()
+    return redirect(reverse('participantes'))
 
