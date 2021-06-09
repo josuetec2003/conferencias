@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.urls import reverse
@@ -56,6 +56,7 @@ def participantes(request):
 
     # La primera consulta: select * from participantes order by nombre desc
     # Realizar un Queryset con el ORM de Django
+    activo = 'participantes'
     q = request.GET.get('q')
 
     if q:
@@ -70,6 +71,7 @@ def participantes(request):
         data = Participante.objects.all().order_by('nombre')
 
     ctx = {
+        'activo': activo,
         'participantes': data,
         'q': q
     }
@@ -81,3 +83,29 @@ def eliminar_participante(request, id):
     Participante.objects.get(pk=id).delete()
     return redirect(reverse('participantes'))
 
+
+def editar_participante(request, id):
+    par = get_object_or_404(Participante, pk=id)
+
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        correo = request.POST.get('correo')
+        twitter = request.POST.get('twitter')
+
+        par.nombre = nombre
+        par.apellido = apellido
+        par.correo = correo
+        par.twitter = twitter
+        par.save()
+
+    #par = Participante.objects.get(pk=id)    
+    data = Participante.objects.all().order_by('nombre')
+
+    ctx = {
+        'activo': 'participantes',
+        'participantes': data,
+        'p': par
+    }
+
+    return render(request, 'registro/participantes.html', ctx)
