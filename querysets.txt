@@ -1,0 +1,73 @@
+SENTENCIAS SQL                                      QUERYSETS
+
+select *                                            results = Participante.objects.all()
+from participantes
+-------------------------------------------------------------------------------------------------------
+select count(*)                                     conteo = results.count()
+from participantes                                  conteo = Participante.objects.count()
+-------------------------------------------------------------------------------------------------------
+select *                                            pendientes = Conferencia.objects.filter(estado='1')
+from conferencias                                   pendientes.count()
+where estado = '1'
+-------------------------------------------------------------------------------------------------------
+select count(*)
+from conferencias
+where estado = '1'
+-------------------------------------------------------------------------------------------------------
+# conferencias que NO esten en estado pendiente
+select *                                            no_pendientes = Conferencia.objects.exclude(estado='1')
+from conferencias                                   no_pendientes.count()
+where estado <> '1'
+-------------------------------------------------------------------------------------------------------
+# conferencias con mas de 10 cupos 
+select *                                            cupos = Conferencia.objects.filter(cupos__gt = 10)
+from conferencias
+where cupos > 10
+# >  --------   gt
+# >= --------   gte
+# <  --------   lt
+# <= --------   lte
+-------------------------------------------------------------------------------------------------------
+# conferencias cuyo nombre comience con d|D 
+select *                                            
+from conferencias
+where nombre like 'd%'                              confs1 = Conferencia.objects.filter(nombre__startswith='d')
+where nombre like '%d'                              confs2 = Conferencia.objects.filter(nombre__endswith='d')
+where nombre like '%d%'                             confs3 = Conferencia.objects.filter(nombre__contains='d')
+-------------------------------------------------------------------------------------------------------
+select C.nombre, CF.nombre                          confs1.conferencista.all()
+from conferencia C inner join Conferenciasta CF
+on C.ConferencistaID = CF.ConferencistaID
+-------------------------------------------------------------------------------------------------------
+select top 1                                        conferencistas = Conferencista.objects.all()
+from tabla                                          conferencistas.first() | .last()
+order by id desc
+-------------------------------------------------------------------------------------------------------
+select *                                            data2 = Conferencia.objects.filter(fecha__range = (fecha1, fecha2))
+from conferencias
+where columna between 'f1' and 'f2'
+-------------------------------------------------------------------------------------------------------
+select *                                            a = Conferencia.objects.get(pk=3)
+from conferencias                                   b = Conferencia.objects.filter(pk=3).first()
+where conferencia_id = ?
+-------------------------------------------------------------------------------------------------------
+select *                                            from django.db.models import Q
+from conferencias
+where condicion1 or condicion2
+-------------------------------------------------------------------------------------------------------
+select top 3 *                                      conferencistas = Conferencista.objects.all()[0:3]
+from conferencias
+-------------------------------------------------------------------------------------------------------
+select sum(columna) as hrs                          from django.db.models import Sum
+from tabla                                          horas = Conferencia.objects.all().aggregate(h=Sum('duracion'))['h']
+-------------------------------------------------------------------------------------------------------
+select columna1, sum(columna2)                      from django.db.models import Count                   
+from tabla                                          data = Asistencia.objects.all().order_by('conferencia')
+group by columna1                                   x = data.values('conferencia__nombre').annotate(t=Count('participante'))
+-------------------------------------------------------------------------------------------------------
+select col1 * col2 as campoCalculado
+from tabla
+-------------------------------------------------------------------------------------------------------
+select col1, col2, col3
+from tabla
+-------------------------------------------------------------------------------------------------------
