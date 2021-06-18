@@ -71,3 +71,24 @@ from tabla
 select col1, col2, col3
 from tabla
 -------------------------------------------------------------------------------------------------------
+insert into conferencistas (nombre, apellido, ex...)    c1 = Conferencista(nombre='Gaby', apellido='Martinez', experiencia='C#')
+values ('Gaby', 'Martinez', 'C#')                       c1.save()
+
+                                                        Conferencista.objects.create(nombre='Gaby', apellido='Martinez', experiencia='C#')
+
+                                                        objeto, creado = Conferencista.objects.get_or_create(nombre='Gaby', apellido='Martinez')
+-------------------------------------------------------------------------------------------------------
+insert into conferencista (nombre, apellido, exp...)    
+values ('A', 'B', 'C'), 
+       ('D', 'E', 'F'), 
+       ('X', 'Y', 'Z')
+-------------------------------------------------------------------------------------------------------
+update conferencista set nombre = '', apellido = ''
+where id = 8
+
+-------------------------------------------------------------------------------------------------------
+update conferencista set experiencia = 'Sql Server'     Conferencista.objects.filter(nombre__startswith='A').update(experiencia='Sql Server')
+where nombre like 'a%'
+-------------------------------------------------------------------------------------------------------
+
+

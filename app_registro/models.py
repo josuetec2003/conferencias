@@ -71,7 +71,7 @@ class Conferencia(models.Model):
 class Participante(models.Model):
     nombre = models.CharField(max_length=25)
     apellido = models.CharField(max_length=25)
-    correo = models.EmailField()
+    correo = models.EmailField(null=True, blank=True)
     twitter = models.CharField(max_length=35, null=True, blank=True)
 
     def __str__(self):
