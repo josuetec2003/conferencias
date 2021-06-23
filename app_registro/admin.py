@@ -3,8 +3,8 @@ from .models import Conferencia, Conferencista, Participante, Asistencia
 
 # ------------------------------------------------------------------------
 class ConferenciaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre', 'fecha', 'hora',)
-    list_editable = ('nombre',)
+    list_display = ('id', 'nombre', 'fecha', 'hora', 'estado',)
+    list_editable = ('nombre', 'fecha', 'estado',)
 
 admin.site.register(Conferencia, ConferenciaAdmin)
 # ------------------------------------------------------------------------

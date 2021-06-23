@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Conferencias
+{% endblock %}
+
+{% block container %}
+    <h2>Próximas Conferencias</h2> <hr>
+
+    {% if confs %}
+        <div class="row">
+            {% for conf in confs %}
+            <div class="col-3">
+                <div class="card" style="width: 18rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{ conf.nombre }}</h5>
+                    <p class="card-text text-secondary">
+                        Publicada hace <strong>{{ conf.fecha_registro|timesince }}</strong>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Fecha: <strong>{{ conf.fecha }}</strong></li>
+                    <li class="list-group-item">Hora: <strong>{{ conf.hora }}</strong></li>
+                    <li class="list-group-item">Duración: <strong>{{ conf.duracion }} horas</strong></li>
+                    <li class="list-group-item">Cupos: <strong>{{ conf.cupos }}</strong></li>
+                    <li class="list-group-item">Asistencias: <strong>{{ conf.asistencia_set.all.count }}</strong></li>
+
+                </ul>
+                <div class="card-body">
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-danger">No hay conferencias al momento</div>
+    {% endif %}
+{% endblock %}
