@@ -12,25 +12,40 @@
             {% for conf in confs %}
             <div class="col-3">
                 <div class="card" style="width: 18rem;">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">{{ conf.nombre }}</h5>
-                    <p class="card-text text-secondary">
-                        Publicada hace <strong>{{ conf.fecha_registro|timesince }}</strong>
-                    </p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Fecha: <strong>{{ conf.fecha }}</strong></li>
-                    <li class="list-group-item">Hora: <strong>{{ conf.hora }}</strong></li>
-                    <li class="list-group-item">Duración: <strong>{{ conf.duracion }} horas</strong></li>
-                    <li class="list-group-item">Cupos: <strong>{{ conf.cupos }}</strong></li>
-                    <li class="list-group-item">Asistencias: <strong>{{ conf.asistencia_set.all.count }}</strong></li>
+                    <div class="card-body">
+                        {% for c in conf.conferencista.all %}
+                        <img data-bs-toggle="tooltip" title="{{ c.nombre }} {{ c.apellido }}" width="30%" src="/media/{{ c.foto }}" alt="{{ c.nombre }}" />
+                        {% endfor %}
+                    </div>
 
-                </ul>
-                <div class="card-body">
-                    <a href="#" class="card-link">Card link</a>
-                    <a href="#" class="card-link">Another link</a>
-                </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ conf.nombre }}</h5>
+                        <p class="card-text text-secondary">
+                            Publicada hace <strong>{{ conf.fecha_registro|timesince }}</strong>
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Fecha: <strong>{{ conf.fecha }}</strong></li>
+                        <li class="list-group-item">Hora: <strong>{{ conf.hora }}</strong></li>
+                        <li class="list-group-item">Duración: <strong>{{ conf.duracion }} horas</strong></li>
+                        <li class="list-group-item">
+                            Cupos: 
+                            {% if conf.cupos_disponibles > 0 %}
+                                <strong>{{ conf.cupos_disponibles }}</strong>
+                            {% else %}
+                                <strong class="text-danger">No hay</strong>
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item">Asistencias: <strong>{{ conf.asistencia_set.all.count }}</strong></li>
+
+                    </ul>
+                    <div class="card-body">
+                        {% if conf.cupos_disponibles > 0 %}
+                            <a href="#" class="card-link">Asistir</a>
+                        {% endif %}                    
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
                 </div>
             </div>
             {% endfor %}

@@ -50,6 +50,12 @@ class Conferencia(models.Model):
     cupos = models.SmallIntegerField(default=10)
 
     @property
+    def cupos_disponibles(self):
+        num_asistencias = self.asistencia_set.count()
+        return self.cupos - num_asistencias
+
+
+    @property
     def tiempo_restante(self):
         hoy = datetime.now().date()
 
