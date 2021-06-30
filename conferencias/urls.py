@@ -17,16 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from app_registro import views
+from app_seguridad import views   
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
-    path('participantes/', views.participantes, name="participantes"),
-    path('participantes/<int:id>/eliminar/', views.eliminar_participante, name='eliminar_participante'),
-    path('participantes/<int:id>/editar/', views.editar_participante, name='editar_participante'),
-    path('conferencias/', views.conferencias, name='conferencias'),
-
+    path('registro/', include('app_registro.urls')),
+    path('', views.index),
+    path('login/', views.log_in, name="login_view"),
+    path('logout/', views.log_out, name="logout_view"),
+    
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -18,9 +18,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link {% if activo == 'participantes' %}active{% endif %}" href="{% url 'participantes' %}">Participantes</a>
+                <a class="nav-link {% if activo == 'participantes' %}active{% endif %}" href="{% url 'registro:participantes' %}">Participantes</a>
                 <a class="nav-link {% if activo == 'conferencistas' %}active{% endif %}" href="#">Conferencistas</a>
                 <a class="nav-link {% if activo == 'conferencias' %}active{% endif %}" href="#">Conferencias</a>
+                <a class="nav-link" href="{% url 'logout_view' %}">Salir</a>
             </div>
             </div>
         </div>

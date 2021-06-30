@@ -92,3 +92,12 @@ where nombre like 'a%'
 -------------------------------------------------------------------------------------------------------
 
 
+
+
+Equipo 1: INVENTARIO DE PRODUCTOS
+Equipo 2: AGENCIA DE TRANSPORTE
+Equipo 3: LOTIFICADORA
+Equipo 4: PRESUPUESTO PERSONAL
+Equipo 5: GESTOR ACADÉMICO
+
+

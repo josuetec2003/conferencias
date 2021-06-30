@@ -10,9 +10,9 @@
         <!-- formulario -->
         <div class="col-3">
             {% if p %}
-            <form action="{% url 'editar_participante' p.id %}" method="post">
+            <form action="{% url 'registro:editar_participante' p.id %}" method="post">
             {% else %}
-            <form action="{% url 'participantes' %}" method="post">
+            <form action="{% url 'registro:participantes' %}" method="post">
             {% endif %}
                 {% csrf_token %}
                 <div class="mb-3">
@@ -84,8 +84,8 @@
                             {{ p.twitter|default_if_none:'-' }}
                         </td>
                         <td class="text-center">
-                            <a onclick="if (!confirm('Confirme la eliminacion')) return false;" href="{% url 'eliminar_participante' p.id %}" class="text-danger"><span class="fas fa-trash-alt"></span></a>
-                            <a href="{% url 'editar_participante' p.id %}" class="text-success"><span class="fas fa-edit"></span></a> 
+                            <a onclick="if (!confirm('Confirme la eliminacion')) return false;" href="{% url 'registro:eliminar_participante' p.id %}" class="text-danger"><span class="fas fa-trash-alt"></span></a>
+                            <a href="{% url 'registro:editar_participante' p.id %}" class="text-success"><span class="fas fa-edit"></span></a> 
                         </td>
                     </tr>
                     {% empty %}

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app_registro',
     'debug_toolbar',
+    'app_seguridad',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +116,9 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+LOGIN_REDIRECT_URL = '/registro/'
+LOGIN_URL = '/'
 
 
 # Static files (CSS, JavaScript, Images)

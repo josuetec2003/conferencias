@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 from .models import Participante, Conferencia
 
 from telegram import Bot # pip install python-telegram-bot
@@ -11,10 +12,12 @@ GROUP_ID = -549716729
 
 bot = Bot(token=TOKEN)
 
+@login_required()
 def index(request):
     return render(request, 'registro/index.html')
 
 
+@login_required()
 def participantes(request):
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
@@ -79,11 +82,13 @@ def participantes(request):
     return render(request, 'registro/participantes.html', ctx)
 
 
+@login_required()
 def eliminar_participante(request, id):
     Participante.objects.get(pk=id).delete()
     return redirect(reverse('participantes'))
 
 
+@login_required()
 def editar_participante(request, id):
     par = get_object_or_404(Participante, pk=id)
 
@@ -111,6 +116,7 @@ def editar_participante(request, id):
     return render(request, 'registro/participantes.html', ctx)
 
 
+@login_required()
 def conferencias(request):
     confs = Conferencia.objects.filter(estado='1').order_by('fecha')
 
