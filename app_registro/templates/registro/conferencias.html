@@ -22,12 +22,12 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ conf.nombre }}</h5>
                         <p class="card-text text-secondary">
-                            Publicada hace <strong>{{ conf.fecha_registro|timesince }}</strong>
+                            <small>Publicada hace <strong>{{ conf.fecha_registro|timesince }}</strong></small>
                         </p>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Fecha: <strong>{{ conf.fecha }}</strong></li>
-                        <li class="list-group-item">Hora: <strong>{{ conf.hora }}</strong></li>
+                        <li class="list-group-item">Hora: <strong>{{ conf.hora|date:'g A' }}</strong></li>
                         <li class="list-group-item">Duración: <strong>{{ conf.duracion }} horas</strong></li>
                         <li class="list-group-item">
                             Cupos: 
@@ -42,7 +42,7 @@
                     </ul>
                     <div class="card-body">
                         {% if conf.cupos_disponibles > 0 %}
-                            <a href="#" class="card-link">Asistir</a>
+                            <a href="{% url 'registro:asistir' conf.id  %}" class="card-link">Asistir</a>
                         {% endif %}                    
                         <a href="#" class="card-link">Another link</a>
                     </div>
