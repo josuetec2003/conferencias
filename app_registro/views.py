@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Participante, Conferencia
+from .models import Participante, Conferencia, Asistencia
 from datetime import datetime
 
 from telegram import Bot # pip install python-telegram-bot
@@ -126,5 +126,30 @@ def conferencias(request):
     return render(request, 'registro/conferencias.html', {'confs': confs})
 
 @login_required()
-def asistir(request, id):
-    return HttpResponse(f'Esta conferencia tiene id {id} y usted es {request.user}')
+def asistir(request, id, accion):
+    if accion == 'asistir':
+        # Obteniendo el objeto Conferencia utilizando el id de la URL
+        conf = get_object_or_404(Conferencia, pk=id)
+
+        # Verificar si el participante ya forma parte de la asistencia
+        obj, created = Asistencia.objects.get_or_create(conferencia=conf, participante=request.user.participante)
+
+        if created:
+            msj = f'Ya formas parte de la conferencia {conf.nombre}'
+        else:
+            msj = f'Tu asistencia ya habia sido reservada'
+        
+        messages.add_message(request, messages.ERROR, msj)
+
+        return redirect(reverse('registro:conferencias'))
+
+    elif accion == 'salirme':
+        conf = get_object_or_404(Conferencia, pk=id)
+        Asistencia.objects.filter(conferencia=conf, participante=request.user.participante).delete()
+
+        messages.add_message(request, messages.ERROR, 'Te has salido de la conferencia')
+        return redirect(reverse('registro:conferencias'))
+        
+
+    else:
+        raise Http404("No encontramos lo que buscas")

@@ -23,8 +23,7 @@
                     <a class="nav-link {% if activo == 'conferencias' %}active{% endif %}" href="{% url 'registro:conferencias' %}">Conferencias</a>
                     <a class="nav-link" href="{% url 'logout_view' %}">Salir</a>
                     <a class="nav-link text-warning" href="{% url 'logout_view' %}">{{ request.user.participante }}</a>
-                </div>
-                
+                </div>                
             </div>
         </div>
     </nav>

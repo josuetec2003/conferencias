@@ -1,10 +1,18 @@
 {% extends 'base.html' %}
 
+{% load registro_filters %}
+
 {% block title %}
     Conferencias
 {% endblock %}
 
 {% block container %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
     <h2>Próximas Conferencias</h2> <hr>
 
     {% if confs %}
@@ -20,7 +28,7 @@
 
 
                     <div class="card-body">
-                        <h5 class="card-title">{{ conf.nombre }}</h5>
+                        <h5 class="card-title">{{ conf.nombre|mayusculas|safe }}</h5>
                         <p class="card-text text-secondary">
                             <small>Publicada hace <strong>{{ conf.fecha_registro|timesince }}</strong></small>
                         </p>
@@ -42,7 +50,13 @@
                     </ul>
                     <div class="card-body">
                         {% if conf.cupos_disponibles > 0 %}
-                            <a href="{% url 'registro:asistir' conf.id  %}" class="card-link">Asistir</a>
+                            {% validar_asistencia conf request.user.participante as asistencia %}
+
+                            {% if asistencia %}
+                            <a class="text-danger" href="{% url 'registro:asistir' conf.id 'salirme' %}" class="card-link">Salirme</a>
+                            {% else %}
+                            <a href="{% url 'registro:asistir' conf.id 'asistir'  %}" class="card-link">Asistir</a>
+                            {% endif %}
                         {% endif %}                    
                         <a href="#" class="card-link">Another link</a>
                     </div>
