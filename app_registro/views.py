@@ -126,7 +126,7 @@ def conferencias(request):
     return render(request, 'registro/conferencias.html', {'confs': confs})
 
 @login_required()
-def asistir(request, id, accion):
+def asistir(request, id, accion): 
     if accion == 'asistir':
         # Obteniendo el objeto Conferencia utilizando el id de la URL
         conf = get_object_or_404(Conferencia, pk=id)

@@ -33,6 +33,7 @@
                             <small>Publicada hace <strong>{{ conf.fecha_registro|timesince }}</strong></small>
                         </p>
                     </div>
+
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Fecha: <strong>{{ conf.fecha }}</strong></li>
                         <li class="list-group-item">Hora: <strong>{{ conf.hora|date:'g A' }}</strong></li>
@@ -46,19 +47,20 @@
                             {% endif %}
                         </li>
                         <li class="list-group-item">Asistencias: <strong>{{ conf.asistencia_set.all.count }}</strong></li>
-
                     </ul>
+
                     <div class="card-body">
                         {% if conf.cupos_disponibles > 0 %}
                             {% validar_asistencia conf request.user.participante as asistencia %}
 
                             {% if asistencia %}
-                            <a class="text-danger" href="{% url 'registro:asistir' conf.id 'salirme' %}" class="card-link">Salirme</a>
+                            <a class="btn btn-sm btn-danger" onclick="if (!confirm('Confirma su salida de esta conferencia?')) return false;" href="{% url 'registro:asistir' conf.id 'salirme' %}">Salirme</a>                            
                             {% else %}
-                            <a href="{% url 'registro:asistir' conf.id 'asistir'  %}" class="card-link">Asistir</a>
+                            <a class="btn btn-sm btn-success" href="{% url 'registro:asistir' conf.id 'asistir'  %}"> <span class="fas fa-plus-circle"></span> Asistir</a>
                             {% endif %}
-                        {% endif %}                    
-                        <a href="#" class="card-link">Another link</a>
+                        {% endif %}
+
+                        <button class="btn btn-primary btn-sm" data-conferencia="{{ conf.nombre }}" data-participantes="{% for p in conf.asistencia_set.all %}{{p.participante.nombre}} {{p.participante.apellido}},{% endfor %}" data-bs-toggle="modal" data-bs-target="#modalParticipantes">Participantes</button>
                     </div>
                 </div>
             </div>
@@ -67,4 +69,72 @@
     {% else %}
         <div class="alert alert-danger">No hay conferencias al momento</div>
     {% endif %}
+
+    <div class="modal fade" id="modalParticipantes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleConf"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <table class="table table-borderless">
+                        <tbody id="tbody-participantes"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>                    
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script>
+
+    $(function () {
+        // Guardamos en una variable de js la etiqueta que representa a la ventana modal
+        var exampleModal = document.getElementById('modalParticipantes')
+
+        // Agregar el evento show de la ventana modal
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            // Aqui se guarda en una variable de js el boton que abrió la ventana modal
+            var button = event.relatedTarget;
+
+            // Aqui obtenemos el nombre de la conferencia del atributo data-conferencia
+            var conf = button.getAttribute('data-conferencia')
+            
+            document.getElementById('modalTitleConf').innerText = conf;
+
+        
+            // Aqui obtenemos la informacion del atributo data-participantes del boton
+            var participantes = button.getAttribute('data-participantes');
+
+            // Convertir a los participantes en un arreglo de cadenas
+            var lista = participantes.split(',')
+
+            // agregar los participantes a la tabla ubicada en la ventana modal
+            var body = $('#tbody-participantes'); // jquery
+            body.empty();
+
+            lista.forEach(p => {
+                if (p)
+                {
+                    body.append( `<tr><td>${p}</td><tr>` ); // template string
+                }
+            });
+
+            
+            // Update the modal's content.
+            //var modalTitle = exampleModal.querySelector('.modal-title')
+            //var modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+            //modalTitle.textContent = 'New message to ' + recipient
+            //modalBodyInput.value = recipient
+        })
+    })
+
+</script>
 {% endblock %}
