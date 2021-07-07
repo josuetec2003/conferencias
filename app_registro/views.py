@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .models import Participante, Conferencia, Asistencia
 from datetime import datetime
-
+from time import sleep
 from telegram import Bot # pip install python-telegram-bot
 
 TOKEN = '1689491589:AAFQs3K6z_CGP7Lw0i2SRZfU-CQXlRHTzWs'
@@ -153,3 +153,14 @@ def asistir(request, id, accion):
 
     else:
         raise Http404("No encontramos lo que buscas")
+
+
+def ajax_view(request):
+    if request.is_ajax():
+        ctx = {'respuesta': 'Esto es AJAX'}
+
+        sleep(20)
+
+        return JsonResponse(ctx)
+    else:
+        return HttpResponse('No tienes permiso para visualizar el contenido de esta pagina')

@@ -8,5 +8,36 @@
     
     <h1>Home Page</h1>
 
+    <div class="row">
+        <div class="col-6">
+            <!-- Formulario -->
+            <input id="txt-busqueda" type="text" class="form-control">
+            <button id="btn-buscar" class="btn btn-success mt-1">Enviar</button>
+        </div>
+        <div class="col-6">
+            <!-- Resultado -->
+            <span id="resultado">Resultado</span>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+    $(function () {
+        // agregando el evento click al boton
+        $('#btn-buscar').on('click', function () {
+            var busqueda = $('#txt-busqueda').val();
+            // ajax: json
+
+            $('#resultado').text('Cargando...');
+            $.get('/registro/peticion/ajax/', {}, function (response) {
+                $('#resultado').text(response.respuesta);
+            }, 'json')
+
+
+        })
+    })
+</script>
 {% endblock %}
     
