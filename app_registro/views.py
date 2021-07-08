@@ -156,11 +156,26 @@ def asistir(request, id, accion):
 
 
 def ajax_view(request):
-    if request.is_ajax():
-        ctx = {'respuesta': 'Esto es AJAX'}
+    # import pdb; pdb.set_trace()
 
-        sleep(20)
+    if request.is_ajax() and request.method == 'POST':
+        busqueda = request.POST.get('busqueda')
 
+        # Realizar una consulta al modelo Conferencia
+        conf = Conferencia.objects.filter(nombre__contains=busqueda)
+
+        if conf:
+            ctx = {'OK': True, 'msj': f'Se encontraron {conf.count()} conferencias'}
+        else:
+            ctx = {'OK': False, 'msj': 'No se encontró ninguna conferencia con su búsqueda'}
+        
         return JsonResponse(ctx)
-    else:
+
+    elif request.is_ajax() and request.method == 'GET':
+        pass
+
+    elif request.method == 'POST':
+        pass
+
+    else: # GET
         return HttpResponse('No tienes permiso para visualizar el contenido de esta pagina')
